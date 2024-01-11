@@ -1,0 +1,37 @@
+create table users( 
+userid int primary key, 
+ username varchar(50), 
+ password varchar(50), 
+ firstname varchar(50), 
+ lastname varchar(50), 
+ number_phone varchar(50), 
+ bio varchar(50) 
+ 
+); 
+create table story( 
+ storyID int primary key , 
+ owner int , 
+ foreign key (owner) references users(userid) 
+) 
+create table conversaƟons(
+ conversaƟonID int primary key,
+ conversaƟonName varchar(50),
+ conversaƟonType varchar(50),
+ owner INT, 
+ FOREIGN KEY (owner) REFERENCES users(userid)
+);
+CREATE TABLE messages ( 
+ messageID INT PRIMARY KEY, 
+ senderID INT, 
+ content VARCHAR(50), 
+ conversaƟonREF INT,
+ FOREIGN KEY (senderID) REFERENCES users(userid), 
+ FOREIGN KEY (conversaƟonREF) REFERENCES conversaƟons(conversaƟonID)
+); 
+CREATE TABLE userconversaƟons (
+ userconvID INT, 
+ userID INT, 
+ conversaƟonID INT,
+ FOREIGN KEY (userID) REFERENCES users(userid), 
+ FOREIGN KEY (conversaƟonID) REFERENCES conversaƟons(conversaƟonID)
+);
