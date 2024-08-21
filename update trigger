@@ -1,0 +1,27 @@
+select * from inf
+update id_table set name='xxxxxx',email='aaaaa' where id=1;
+create trigger tr_up_id_table
+on id_table
+for update as begin
+
+declare @id int ;
+declare @oldname nvarchar(20),@newname nvarchar(20),@newemail nvarchar(20),@oldemail nvarchar(20),@oldid_gender int,@newid_gender int,@ans nvarchar(100);
+select * from inserted;
+select * from deleted;
+select * into #temp from inserted;
+while(exists(select id from #temp))
+begin
+set @ans='';
+select top 1 @id=id ,@newname=name,@newemail=email,@newid_gender=genderid from #temp;
+select @oldname=name,@oldemail=email,@oldid_gender=genderid from deleted where id=@id;
+if(@newname<>@oldname)
+    set @ans=@ans+'name change from '+@oldname + 'to '+@newname+ ' ' ;
+if(@newemail<>@oldemail)
+   set @ans=@ans+'email change from '+@oldemail + 'to '+@newemail+ ' ' ;
+if (@newid_gender<>@oldid_gender)
+      set @ans=@ans+'gender id  change from '+cast(@oldid_gender as nvarchar(10)) + 'to '+ cast(@newid_gender as nvarchar(10))+ ' ' ;
+insert into inf (id,infor) values (@id,@ans);
+delete from #temp where id=@id;
+end
+end
+
